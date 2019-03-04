@@ -30,7 +30,8 @@ public enum CoinType {
     WANCHAIN (5718350),
     ZCOIN (136),
     ZCASH (133),
-    RIPPLE (144);
+    RIPPLE (144),
+    STELLAR (148);
 
     private final int value;
     CoinType(int value) {
