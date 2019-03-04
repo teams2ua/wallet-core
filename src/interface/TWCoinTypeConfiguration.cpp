@@ -36,6 +36,7 @@ TWString *_Nullable TWCoinTypeConfigurationGetSymbol(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "BNB"; break;
     case TWCoinTypeEOS: string = "EOS"; break;
     case TWCoinTypeRipple: string = "XRP"; break;
+    case TWCoinTypeStellar: string = "XLM"; break;
     default: string = ""; break;
     }
     return TWStringCreateWithUTF8Bytes(string.c_str());
@@ -62,6 +63,8 @@ int TWCoinTypeConfigurationGetDecimals(enum TWCoinType type) {
     case TWCoinTypeZcoin:
     case TWCoinTypeZcash:
      return 8;
+    case TWCoinTypeStellar:
+        return 7;
     case TWCoinTypeRipple:
     case TWCoinTypeTron:
         return 6;
@@ -79,6 +82,7 @@ TWString *_Nullable TWCoinTypeConfigurationGetTransactionURL(enum TWCoinType typ
     case TWCoinTypeBitcoinCash:
     case TWCoinTypeICON:
     case TWCoinTypeLitecoin:
+    case TWCoinTypeStellar:
         url += "/transaction/" + txId;
         break;
     case TWCoinTypeEthereum:
@@ -138,6 +142,7 @@ const char *explorerURLForCoinType(enum TWCoinType type) {
     case TWCoinTypeBinance: return "https://binance.com";
     case TWCoinTypeEOS: return "https://eospark.com";
     case TWCoinTypeRipple: return "https://bithomp.com";
+    case  TWCoinTypeStellar: return "https://stellarscan.io";
     default: return "";
     }
 }
@@ -165,6 +170,7 @@ TWString *_Nonnull TWCoinTypeConfigurationGetID(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "binance"; break;
     case TWCoinTypeEOS: string = "eos"; break;
     case TWCoinTypeRipple: string = "ripple"; break;
+    case TWCoinTypeStellar: string = "stellar"; break;
     default: string = ""; break;
     }
     return TWStringCreateWithUTF8Bytes(string.c_str());
@@ -193,6 +199,7 @@ TWString *_Nonnull TWCoinTypeConfigurationGetName(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "Binance"; break;
     case TWCoinTypeEOS: string = "EOS"; break;
     case TWCoinTypeRipple: string = "Ripple"; break;
+    case TWCoinTypeStellar: string = "Stellar"; break;
     default: string = ""; break;
     }
     return TWStringCreateWithUTF8Bytes(string.c_str());
