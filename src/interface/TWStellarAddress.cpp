@@ -36,15 +36,8 @@ struct TWStellarAddress *_Nullable TWStellarAddressCreateWithData(TWData *_Nonnu
     return new TWStellarAddress{ Address(*d) };
 }
 
-struct TWStellarAddress *_Nonnull TWStellarAddressCreateWithPublicKey(struct TWPublicKey publicKey) {
-    std::vector<uint8_t> data;
-    if (TWPublicKeyIsCompressed(publicKey)) {
-        data.insert(data.end(), publicKey.bytes, publicKey.bytes + PublicKey::compressedSize);
-    } else {
-        data.insert(data.end(), publicKey.bytes, publicKey.bytes + PublicKey::uncompressedSize);
-    }
-    const auto address = Address(PublicKey(data));
-    return new TWStellarAddress{ std::move(address) };
+struct TWStellarAddress *_Nonnull TWStellarAddressCreateWithPublicKey(struct TWPublicKey *_Nonnull publicKey) {
+    return new TWStellarAddress{ Address(publicKey->impl) };
 }
 
 void TWStellarAddressDelete(struct TWStellarAddress *_Nonnull address) {

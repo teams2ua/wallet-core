@@ -19,18 +19,30 @@ Reason:
 ## Checklist
 
 <!-- Sample Checklist -->
+
 - [ ] Coin configuration
-- - [ ] coin type / decimals
-- - [ ] recommended tx block explorer
+- - [ ] Add coin type / decimals
+- - [ ] Recommended tx block explorer
+- - [ ] Return correct curve and purpose in `src/interface/TWCoinType.cpp`.
 - [ ] Address
-- - [ ] derived from bip39 phrases
-- - [ ] from public key / string
-- - [ ] validation
+- - [ ] Derivation from bip39 phrases
+- - [ ] Derivation from public key / string
+- - [ ] Implement address validation and conversion in `src/Addres.cpp`.
 - [ ] Transaction
-- - [ ] serialization
-- - [ ] signing
+- - [ ] serialization / encoding
+- [ ] Signer
+- - [ ] signing input / output protobuf messages
+- - [ ] signature
 - [ ] C interfaces
-- - [ ] Validate generated code in Android and iOS projects
+- - [ ] TW[Blockchain]Address
+- - [ ] TW[Blockchain]Transaction / TW[Blockchain]Signer
 - [ ] Tests
 - - [ ] Unit test
-- - [ ] integration test ( Java / Swift)
+- - [ ] C Interface test ( Java / Swift)
+- [ ] RPC documentation
+- - [ ] query balance
+- - [ ] query fee
+- - [ ] query transaction list
+- - [ ] query transaction detail
+- - [ ] submit rawtx
+- - [ ] blockchain info (block height)

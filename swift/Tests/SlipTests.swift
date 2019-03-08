@@ -1,4 +1,4 @@
-// Copyright © 2017-2018 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -23,5 +23,6 @@ class SlipTests: XCTestCase {
         XCTAssertEqual(CoinType.veChain.rawValue, 818)
         XCTAssertEqual(CoinType.icon.rawValue, 74)
         XCTAssertEqual(CoinType.tomoChain.rawValue, 889)
+        XCTAssertEqual(CoinType.tezos.rawValue, 1729)
     }
 }

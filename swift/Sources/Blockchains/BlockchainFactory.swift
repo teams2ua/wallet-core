@@ -1,4 +1,4 @@
-// Copyright © 2017-2018 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -49,5 +49,9 @@ public func blockchain(coin: CoinType) -> Blockchain {
         return Ripple()
     case .zcash:
         return Zcash()
+    case .tezos:
+        return Tezos()
+    case .nimiq:
+        return Nimq()
     }
 }

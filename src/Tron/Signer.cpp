@@ -1,4 +1,4 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -8,7 +8,7 @@
 
 #include "Protobuf/TronInternal.pb.h"
 
-#include "../Bitcoin/BinaryCoding.h"
+#include "../BinaryCoding.h"
 #include "../Hash.h"
 #include "../HexCoding.h"
 
@@ -83,7 +83,7 @@ void setBlockReference(const Proto::Transaction& transaction, protocol::Transact
 
     const auto blockHeight = transaction.block_header().number();
     auto heightData = Data();
-    Bitcoin::encode64(blockHeight, heightData);
+    encode64LE(blockHeight, heightData);
     std::reverse(heightData.begin(), heightData.end());
     internal.mutable_raw_data()->set_ref_block_bytes(heightData.data() + heightData.size() - 2, 2);
 }
@@ -121,7 +121,7 @@ Proto::SigningOutput Signer::sign(const Proto::SigningInput& input) noexcept {
     const auto hash = Hash::sha256(Data(serialized.begin(), serialized.end()));
 
     const auto key = PrivateKey(Data(input.private_key().begin(), input.private_key().end()));
-    const auto signature = key.sign(hash);
+    const auto signature = key.sign(hash, TWCurveSECP256k1);
 
     output.set_id(hash.data(), hash.size());
     output.set_signature(signature.data(), signature.size());

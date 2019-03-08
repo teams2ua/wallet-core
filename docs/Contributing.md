@@ -1,7 +1,29 @@
 
 # Contributing
 
-To add functionality to wallet core follow these instructions.
+Wallet Core implements the cryptographic functionality of blockchains. This includes elliptic curve cryptography, hashing, address derivation and transaction signing. However it *does not* implement other aspects like networking and UI. Wallet core behaves like a black box for higher level users like Trust Wallet; it takes inputs from the blockchain and the user (for instance UTXOs, private keys, etc.) and produces an output (like a signed and encoded transaction).
+
+## Library Design Guidelines
+
+This library is designed so that it can be used from any other programming languages, and that every language has an idiomatic interface. Design goals also include minimizing the binary size and maximizing perfomance.
+
+With these goals in mind we chose C/C++ for the implementation and a strict subset of C for the interface. This C interface is used to generate the idiomatic interfaces for every supported language. To augment the expressivity of the interface we also use Protocol Buffer objects that get serialized across the interface.
+
+Keep this in mind when adding to the library:
+* Only expose C headers. Clients should not have access to the C++ interfaces.
+* C headers need to have annotations for the code generation tool, see below.
+* Use Protocol Buffers to represent models. C doesn't have good abstractions for variable-sized types.
+* Every time you modify the interface run the code generation tool and make sure the interface also makes sense in target languages.
+
+## Before you start
+
+* Install Xcode
+* Install Xcode command line tools: `xcode-select --install`
+* Install CMake, boost, protobuf: `brew install cmake ninja boost autoconf automake libtool`
+* Install [Android Studio](https://developer.android.com/studio/index.html)
+* Install the [Android NDK](https://developer.android.com/ndk/guides/)
+
+If you are working on Linux please see the Dockerfile for steps to install dependencies.
 
 ## Project organization
 
@@ -18,43 +40,23 @@ This project has a number of different pieces. Each piece lives in its own subfo
 * The `lib` folder contains third-party dependencies as git submodules.
 * THe `tools` folder contains scripts to automate common tasks.
 
-## Before you start
-
-* Install Xcode
-* Install Xcode command line tools: `xcode-select --install`
-* Install CMake, boost, protobuf: `brew install cmake ninja boost protobuf swift-protobuf autoconf automake libtool`
-* Install [Android Studio](https://developer.android.com/studio/index.html)
-* Install the [Android NDK](https://developer.android.com/ndk/guides/)
-
-## Library Design Guidelines
-
-This library is designed so that it can be used from any other programming languages, and that every language has an idiomatic interface. Design goals also include minimizing the binary size and maximizing perfomance.
-
-With these goals in mind we chose C/C++ for the implementation and a strict subset of C for the interface. This C interface is used to generate the idiomatic interfaces for every supported language. To augment the expressivity of the interface we also use Protocol Buffer objects that get serialized across the interface.
-
-Keep this in mind when adding to the library:
-* Only expose C headers. Clients should not have access to the C++ interfaces.
-* C headers need to have annotations for the code generation tool, see below.
-* Use Protocol Buffers to represent models. C doesn't have good abstractions for variable-sized types.
-* Every time you modify the interface run the code generation tool and make sure the interface also makes sense in target languages.
-
 ## Building
 
 Use the `bootstrap.sh` script in the root folder to quickly build and test.
 
-The build pipeline uses CMake. If you add or rename files you need to re-run cmake: `cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug -DGIT_SUBMODULE=OFF`. If you only change existing files and want to run the tests you only need to run make: `make -C build tests`.
+The build pipeline uses CMake. If you add or rename files you need to re-run cmake: `cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug`. If you only change existing files and want to run the tests you only need to run make: `make -C build tests`.
 
 If you change interface files in the include folder you need to regenerate the interface code: `codegen/bin/codegen`. Run `codegen/bin/codegen -h` to get usage information on the tool. Note that currently if you add a new interface header file you need to manually add that file as a public header to the iOS project, otherwise iOS tests will fail.
 
 ## Testing
 
-Use the `bootstrap.sh` script in the root folder to quickly build and test. After you have run either `bootstrap.sh` or `cmake`, run `make -C build tests && build/tests/tests`. This will run all the C++ tests. To run integration tests on each platform run the respective script in the tools folder:
+Use the `bootstrap.sh` script in the root folder to quickly build and test. After you have run either `bootstrap.sh` or `cmake`, run `make -C build tests && build/tests/tests tests`. This will run all the C++ tests. To run integration tests on each platform run the respective script in the tools folder:
 * Android: `tools/android-test`
 * iOS: `tools/ios-test`
 
 How to generate a Xcode project:
 
-`cmake -Bxcode -GXcode -DCMAKE_BUILD_TYPE=Debug -DGIT_SUBMODULE=OFF`
+`cmake -Bxcode -GXcode -DCMAKE_BUILD_TYPE=Debug`
 
 ## C Headers
 
@@ -101,7 +103,9 @@ The proto file will be used to generate C++ classes and also classes in each sup
 When implementing a new blockchain make sure you go through this checklist:
 - [ ] Implement functionality in C++. Put it in a subfolder of `src/`.
 - [ ] Write unit tests. Put them in a subfolder of `tests/`.
-- [ ] Add relevant constants in `TWCointType`, `TWP2SHPrefix`, `TWEthereymChainID`, etc. as necessary.
+- [ ] Add relevant constants in `TWCoinType`, `TWP2SHPrefix`, `TWEthereymChainID`, `TWHRP`, etc., as necessary.
+- [ ] Implement address validation and conversion in `src/Addres.cpp`.
+- [ ] Return correct curve and purpose in `src/interface/TWCoinType.cpp`.
 - [ ] Write interface header in `include/TrustWalletCore` and implement the interface in `src/interface`.
     - [ ] Write custom address type if necessary.
     - [ ] Write interface for signing transactions.

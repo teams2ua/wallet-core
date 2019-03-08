@@ -1,4 +1,4 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -36,6 +36,8 @@ TWString *_Nullable TWCoinTypeConfigurationGetSymbol(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "BNB"; break;
     case TWCoinTypeEOS: string = "EOS"; break;
     case TWCoinTypeRipple: string = "XRP"; break;
+    case TWCoinTypeTezos: string = "XTZ"; break;
+    case TWCoinTypeNimiq: string = "NIM"; break;
     case TWCoinTypeStellar: string = "XLM"; break;
     default: string = ""; break;
     }
@@ -66,8 +68,11 @@ int TWCoinTypeConfigurationGetDecimals(enum TWCoinType type) {
     case TWCoinTypeStellar:
         return 7;
     case TWCoinTypeRipple:
+    case TWCoinTypeTezos:
     case TWCoinTypeTron:
         return 6;
+    case TWCoinTypeNimiq:
+        return 5;
     case TWCoinTypeEOS: //TODO
     default:
         return 0;
@@ -114,6 +119,12 @@ TWString *_Nullable TWCoinTypeConfigurationGetTransactionURL(enum TWCoinType typ
     case TWCoinTypeRipple:
         url += "/explorer/" + txId;
         break;
+    case TWCoinTypeTezos:
+        url += "/" + txId;
+        break;
+    case TWCoinTypeNimiq:
+        url += "/#" + txId;
+        break;
     case TWCoinTypeBinance: break;
     default: break;
     }
@@ -142,7 +153,9 @@ const char *explorerURLForCoinType(enum TWCoinType type) {
     case TWCoinTypeBinance: return "https://binance.com";
     case TWCoinTypeEOS: return "https://eospark.com";
     case TWCoinTypeRipple: return "https://bithomp.com";
-    case  TWCoinTypeStellar: return "https://stellarscan.io";
+    case TWCoinTypeTezos: return "https://tzscan.io";
+    case TWCoinTypeNimiq: return "https://nimiq.watch";
+    case TWCoinTypeStellar: return "https://stellarscan.io";
     default: return "";
     }
 }
@@ -170,6 +183,8 @@ TWString *_Nonnull TWCoinTypeConfigurationGetID(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "binance"; break;
     case TWCoinTypeEOS: string = "eos"; break;
     case TWCoinTypeRipple: string = "ripple"; break;
+    case TWCoinTypeTezos: string = "tezos"; break;
+    case TWCoinTypeNimiq: string = "nimiq"; break;
     case TWCoinTypeStellar: string = "stellar"; break;
     default: string = ""; break;
     }
@@ -199,6 +214,8 @@ TWString *_Nonnull TWCoinTypeConfigurationGetName(enum TWCoinType type) {
     case TWCoinTypeBinance: string = "Binance"; break;
     case TWCoinTypeEOS: string = "EOS"; break;
     case TWCoinTypeRipple: string = "Ripple"; break;
+    case TWCoinTypeTezos: string = "Tezos"; break;
+    case TWCoinTypeNimiq: string = "Nimiq"; break;
     case TWCoinTypeStellar: string = "Stellar"; break;
     default: string = ""; break;
     }

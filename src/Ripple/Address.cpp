@@ -1,4 +1,4 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -40,6 +40,9 @@ Address::Address(const std::string& string) {
 
 Address::Address(const std::vector<uint8_t>& data) {
     assert(isValid(data));
+    if (data.size() != size) {
+        throw std::invalid_argument("Invalid address data");
+    }
     std::copy(data.begin(), data.end(), bytes.begin());
 }
 

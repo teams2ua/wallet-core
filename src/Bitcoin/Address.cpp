@@ -1,4 +1,4 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -19,6 +19,22 @@ bool Address::isValid(const std::string& string) {
 
     int size = base58_decode_check(string.data(), HASHER_SHA2D, buffer, (int)capacity);
     if (size != Address::size) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Address::isValid(const std::string& string, const std::vector<byte>& validPrefixes) {
+    size_t capacity = 128;
+    uint8_t buffer[capacity];
+
+    int size = base58_decode_check(string.data(), HASHER_SHA2D, buffer, (int)capacity);
+    if (size != Address::size) {
+        return false;
+    }
+
+    if (std::find(validPrefixes.begin(), validPrefixes.end(), buffer[0]) == validPrefixes.end()) {
         return false;
     }
 

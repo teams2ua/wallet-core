@@ -1,4 +1,4 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
@@ -29,8 +29,11 @@ public:
         return data.size() == size;
     }
 
-    /// Determines whether a string makes a valid  address.
+    /// Determines whether a string makes a valid address.
     static bool isValid(const std::string& string);
+
+    /// Determines whether a string makes a valid address, and the prefix is within the valid set.
+    static bool isValid(const std::string& string, const std::vector<byte>& validPrefixes);
 
     /// Initializes a  address with a string representation.
     Address(const std::string& string);

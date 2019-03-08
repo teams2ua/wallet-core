@@ -1,10 +1,12 @@
-// Copyright © 2017-2019 Trust.
+// Copyright © 2017-2019 Trust Wallet.
 //
 // This file is part of Trust. The full Trust copyright notice, including
 // terms governing use, modification, and redistribution, is contained in the
 // file LICENSE at the root of the source code distribution tree.
 
 #include <TrustWalletCore/TWBitcoinCashAddress.h>
+
+#include "../PublicKey.h"
 
 #include <TrustWalletCore/TWPublicKey.h>
 #include <TrezorCrypto/cash_addr.h>
@@ -63,10 +65,10 @@ bool TWBitcoinCashAddressInitWithData(struct TWBitcoinCashAddress *_Nonnull addr
     return true;
 }
 
-void TWBitcoinCashAddressInitWithPublicKey(struct TWBitcoinCashAddress *_Nonnull address, struct TWPublicKey publicKey) {
+void TWBitcoinCashAddressInitWithPublicKey(struct TWBitcoinCashAddress *_Nonnull address, struct TWPublicKey *_Nonnull publicKey) {
     uint8_t payload[21];
     payload[0] = 0;
-    ecdsa_get_pubkeyhash(publicKey.bytes, HASHER_SHA2_RIPEMD, payload + 1);
+    ecdsa_get_pubkeyhash(publicKey->impl.bytes.data(), HASHER_SHA2_RIPEMD, payload + 1);
 
     size_t outlen = 0;
     cash_addr_to_data(address->bytes, &outlen, payload, 21);
